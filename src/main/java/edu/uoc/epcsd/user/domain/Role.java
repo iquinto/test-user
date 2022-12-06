@@ -2,8 +2,6 @@ package edu.uoc.epcsd.user.domain;
 
 
 import lombok.*;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -17,5 +15,5 @@ public class Role {
 
     private ERole name;
 
-    private String desciption;
+    private String description;
 }

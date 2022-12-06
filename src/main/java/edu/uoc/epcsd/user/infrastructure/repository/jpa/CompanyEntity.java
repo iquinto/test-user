@@ -52,6 +52,10 @@ public class CompanyEntity implements DomainTranslatable<Company> {
 
     @Override
     public Company toDomain() {
-        return null;
+        return Company.builder()
+                .id(this.getId())
+                .name(this.getName())
+                .description(this.getDescription())
+                .build();
     }
 }

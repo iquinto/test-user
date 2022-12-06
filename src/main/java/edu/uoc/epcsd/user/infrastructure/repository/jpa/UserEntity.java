@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,11 @@ public class UserEntity implements DomainTranslatable<User> {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "mobile_number", nullable = true, unique = true)
+    @Column(name = "mobile_number", nullable = true)
     private String mobileNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_company", referencedColumnName = "id")
     private CompanyEntity company;
 
@@ -59,21 +61,24 @@ public class UserEntity implements DomainTranslatable<User> {
                 .mobileNumber(user.getMobileNumber())
                 .company(CompanyEntity.fromDomain(user.getCompany()))
                 .roles(user.getRoles().stream().map(RoleEntity::fromDomain).collect(Collectors.toSet()))
-
                 .build();
     }
 
     @Override
     public User toDomain() {
-       return User.builder()
-               .id(this.getId())
-               .fullName(this.getFullName())
-               .email(this.getEmail())
-               .password(this.getPassword())
-               .mobileNumber(this.getMobileNumber())
-              // .company(CompanyEntity.fromDomain(user.getCompany()))
-               //.roles(user.getRoles().stream().map(RoleEntity::fromDomain).collect(Collectors.toSet()))
+        User user = User.builder()
+                .id(this.getId())
+                .fullName(this.getFullName())
+                .email(this.getEmail())
+                .password(this.getPassword())
+                .mobileNumber(this.getMobileNumber())
+                .roles((this.getRoles().stream().map(RoleEntity::toDomain).collect(Collectors.toSet())))
+                .build();
 
-               .build();
+        if(this.getCompany() != null){
+            user.setCompany(this.getCompany().toDomain());
+        }
+
+       return user;
     }
 }

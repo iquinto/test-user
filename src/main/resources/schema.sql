@@ -44,8 +44,27 @@ values (1, '2022-05-15', '21:30', 'http://foo.bar', 300, 0)
      , (2, '2022-07-25', '22:00', 'http://foo.bar', 350, 0)
 ;
 
+INSERT INTO company ( name, description)
+values ('Sakuragi SL', 'Some description');
 
-INSERT INTO users (full_name, password, email, mobile_number)
-values ('Prova', 'prova12', 'prova@uoc.edu', '600075567')
-;
+
+INSERT INTO users (full_name, password, email, mobile_number, id_company)
+values ( 'Isagani Quinto', 'isaquinto', 'isaquinto@uoc.edu', '600075567', 1),
+ ('Sabrina Alejandra Quintanilla', 'saquintanilla', 'saquintanilla@uoc.edu', '600075567', null),
+ ('Cristian Daza Povedano', 'cdazap', 'cdazap@uoc.edu', '600075567', null);
+
+INSERT INTO roles (name, description)
+values ('ROLE_ADMINISTRATOR', 'admin'),
+ ('ROLE_ORGANIZER', 'organizer'),
+ ('ROLE_USER', 'user');
+
+INSERT INTO user_roles (user_id, role_id)
+values (1, 1),
+ (1, 3),
+ (2, 1),
+ (3, 3);
+
+
+
+
 

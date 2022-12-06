@@ -13,15 +13,15 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rolse")
+@Table(name = "roles")
 public class RoleEntity implements DomainTranslatable<Role> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "name", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private ERole name;
 
 
@@ -36,12 +36,17 @@ public class RoleEntity implements DomainTranslatable<Role> {
         return RoleEntity.builder()
                 .id(role.getId())
                 .name(role.getName())
-                .description(role.getDesciption())
+                .description(role.getDescription())
                 .build();
     }
 
     @Override
     public Role toDomain() {
-        return null;
+
+        return Role.builder()
+                .id(this.getId())
+                .name(this.getName())
+                .description(this.getDescription())
+                .build();
     }
 }
