@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.awt.*;
 import java.net.URI;
 import java.util.List;
 
@@ -57,8 +58,17 @@ public class UserRESTController {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAllUsers() {
-        System.out.println("findAllUsers");
+        log.trace("findAllUsers");
         return userService.findAllUsers();
+    }
+
+
+    @GetMapping("/users/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public  ResponseEntity<User> findUserByEmail(@PathVariable String email) {
+        log.trace("findUserByEmail " + email);
+        return userService.findUserByEmail(email).map(user -> ResponseEntity.ok().body(user))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 

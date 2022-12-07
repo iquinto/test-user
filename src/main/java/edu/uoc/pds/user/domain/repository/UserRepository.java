@@ -14,6 +14,8 @@ public interface UserRepository {
 
     Optional<User> findUserById(Long id);
 
+    Optional<User> findUserByEmail(String email);
+
     Optional<User> findUserByCompany(Company company);
 
     User createUser(User user);
