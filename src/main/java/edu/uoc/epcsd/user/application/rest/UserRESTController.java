@@ -2,7 +2,6 @@ package edu.uoc.epcsd.user.application.rest;
 
 import edu.uoc.epcsd.user.application.request.*;
 import edu.uoc.epcsd.user.domain.*;
-import edu.uoc.epcsd.user.domain.service.CatalogService;
 import edu.uoc.epcsd.user.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,16 +13,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserRESTController {
-
     private final UserService userService;
-
 
     // ROLES
     @GetMapping("/roles")
@@ -33,7 +29,6 @@ public class UserRESTController {
         return userService.findAllRoles();
     }
 
-
     // COMPANIES
     @GetMapping("/companies")
     @ResponseStatus(HttpStatus.OK)
@@ -41,7 +36,6 @@ public class UserRESTController {
         System.out.println("findAllRoles");
         return userService.findAllComapanies();
     }
-
 
     @PostMapping("/companies")
     public ResponseEntity<Long> createCompany(@RequestBody CreateCompanyRequest createCompanyRequest) {
@@ -54,7 +48,6 @@ public class UserRESTController {
 
         return ResponseEntity.created(uri).body(companyId);
     }
-
 
 
     // USERS
@@ -77,8 +70,6 @@ public class UserRESTController {
 
         return ResponseEntity.created(uri).body(user);
     }
-
-
 
 
 }

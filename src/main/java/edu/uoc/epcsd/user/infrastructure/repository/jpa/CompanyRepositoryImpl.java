@@ -1,8 +1,6 @@
 package edu.uoc.epcsd.user.infrastructure.repository.jpa;
 
-import edu.uoc.epcsd.user.domain.Category;
 import edu.uoc.epcsd.user.domain.Company;
-import edu.uoc.epcsd.user.domain.repository.CategoryRepository;
 import edu.uoc.epcsd.user.domain.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

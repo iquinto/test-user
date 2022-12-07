@@ -2,7 +2,6 @@ package edu.uoc.epcsd.user.application.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.uoc.epcsd.user.domain.Category;
 import edu.uoc.epcsd.user.domain.Company;
 import lombok.Getter;
 
