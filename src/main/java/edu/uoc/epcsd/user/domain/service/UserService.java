@@ -8,6 +8,29 @@ import java.util.Set;
 
 public interface UserService {
 
+
+    // roles
+    List<Role> findAllRoles();
+
+    Optional<Role> findRoleById(Long id);
+
+    Optional<Role> findRoleByName(ERole name);
+
+    Long createRole(Role role);
+
+    void deleteRole(Long id);
+
+    // companies
+    List<Company> findAllComapanies();
+
+    Optional<Company> findCompanyById(Long id);
+
+    Long createCompany(Company company);
+
+    void deleteCompany(Long id);
+
+
+    // users
     List<User> findAllUsers();
 
     Optional<User> findUserById(Long id);

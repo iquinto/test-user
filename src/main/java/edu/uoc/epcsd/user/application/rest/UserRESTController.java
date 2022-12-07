@@ -3,6 +3,7 @@ package edu.uoc.epcsd.user.application.rest;
 import edu.uoc.epcsd.user.application.request.CreateCategoryRequest;
 import edu.uoc.epcsd.user.application.request.CreatePerformanceRequest;
 import edu.uoc.epcsd.user.application.request.CreateShowRequest;
+import edu.uoc.epcsd.user.application.request.CreateUserRequest;
 import edu.uoc.epcsd.user.domain.Category;
 import edu.uoc.epcsd.user.domain.Performance;
 import edu.uoc.epcsd.user.domain.Show;
@@ -29,11 +30,31 @@ public class UserRESTController {
 
     private final UserService userService;
 
+
+
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAllUsers() {
         System.out.println("findAllUsers");
         return userService.findAllUsers();
     }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+        System.out.println("HOLA >>>>>>> " + createUserRequest.getUser().getFullName());
+        System.out.println("Creating user " + createUserRequest.getUser().getPassword());
+
+        log.trace("Creating user " + createUserRequest);
+        User user = userService.createUser(createUserRequest.getUser());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(user.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(user);
+    }
+
+
+
 
 }

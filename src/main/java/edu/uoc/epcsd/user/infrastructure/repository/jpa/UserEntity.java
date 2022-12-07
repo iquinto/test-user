@@ -57,7 +57,7 @@ public class UserEntity implements DomainTranslatable<User> {
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
-                .fullName(user.getPassword())
+                .password(user.getPassword())
                 .mobileNumber(user.getMobileNumber())
                 .company(CompanyEntity.fromDomain(user.getCompany()))
                 .roles(user.getRoles().stream().map(RoleEntity::fromDomain).collect(Collectors.toSet()))
