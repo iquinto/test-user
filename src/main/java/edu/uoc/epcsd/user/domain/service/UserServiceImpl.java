@@ -92,10 +92,7 @@ public class UserServiceImpl implements UserService {
             user.setCompany(company);
         }
 
-
         Set<Role> roles = new HashSet<>();
-
-
         if(user.getRoles().size() > 0){
 
             user.getRoles().forEach(role -> {
@@ -117,7 +114,6 @@ public class UserServiceImpl implements UserService {
                         roles.add(userRole);
                 }
             });
-
         }else {
             Role userRole = roleRepository.findRoleByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -125,7 +121,6 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setRoles(roles);
-
         return userRepository.createUser(user);
     }
 

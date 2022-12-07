@@ -1,13 +1,7 @@
 package edu.uoc.epcsd.user.application.rest;
 
-import edu.uoc.epcsd.user.application.request.CreateCategoryRequest;
-import edu.uoc.epcsd.user.application.request.CreatePerformanceRequest;
-import edu.uoc.epcsd.user.application.request.CreateShowRequest;
-import edu.uoc.epcsd.user.application.request.CreateUserRequest;
-import edu.uoc.epcsd.user.domain.Category;
-import edu.uoc.epcsd.user.domain.Performance;
-import edu.uoc.epcsd.user.domain.Show;
-import edu.uoc.epcsd.user.domain.User;
+import edu.uoc.epcsd.user.application.request.*;
+import edu.uoc.epcsd.user.domain.*;
 import edu.uoc.epcsd.user.domain.service.CatalogService;
 import edu.uoc.epcsd.user.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +25,39 @@ public class UserRESTController {
     private final UserService userService;
 
 
+    // ROLES
+    @GetMapping("/roles")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Role> findAllRoles() {
+        System.out.println("findAllRoles");
+        return userService.findAllRoles();
+    }
 
+
+    // COMPANIES
+    @GetMapping("/companies")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Company> findAllComapanies() {
+        System.out.println("findAllRoles");
+        return userService.findAllComapanies();
+    }
+
+
+    @PostMapping("/companies")
+    public ResponseEntity<Long> createCompany(@RequestBody CreateCompanyRequest createCompanyRequest) {
+        log.trace("Creating company " + createCompanyRequest);
+        Long companyId = userService.createCompany(createCompanyRequest.getCompany());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(companyId)
+                .toUri();
+
+        return ResponseEntity.created(uri).body(companyId);
+    }
+
+
+
+    // USERS
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAllUsers() {
@@ -39,11 +65,9 @@ public class UserRESTController {
         return userService.findAllUsers();
     }
 
+
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
-        System.out.println("HOLA >>>>>>> " + createUserRequest.getUser().getFullName());
-        System.out.println("Creating user " + createUserRequest.getUser().getPassword());
-
         log.trace("Creating user " + createUserRequest);
         User user = userService.createUser(createUserRequest.getUser());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
