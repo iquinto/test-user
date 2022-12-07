@@ -1,5 +1,5 @@
 INSERT INTO company ( name, description)
-values ('Sakuragi SL', 'Some description');
+values ('Danza SL', 'Some description');
 
 
 INSERT INTO users (full_name, password, email, mobile_number, id_company)
