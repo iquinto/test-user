@@ -49,7 +49,6 @@ public class AuthenticationService {
 
 
     public AuthenticatedUserResponse validateToken(String token) {
-       System.out.println("SECRET KEY " + secretKey);
 
         String login = Jwts.parser()
                 .setSigningKey(secretKey)
@@ -61,20 +60,14 @@ public class AuthenticationService {
 
         AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user);
         String tokenK =  createToken(user);
-        System.out.println("TOKE GENERATED " +  tokenK);
-
         userResponse.setToken(tokenK);
-
         return userResponse;
     }
 
     private String createToken(User user) {
-        System.out.println("SECRET KEY " + secretKey);
         Claims claims = Jwts.claims().setSubject(user.getEmail());
-
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3600000); // 1 hour
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
