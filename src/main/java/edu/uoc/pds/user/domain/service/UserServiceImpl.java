@@ -99,8 +99,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-
-        if(user.getCompany().getId() != null){
+        if(user.getCompany()!= null){
             Company company = companyRepository.findCompanyById(user.getCompany().getId()).get();
             user.setCompany(company);
         }

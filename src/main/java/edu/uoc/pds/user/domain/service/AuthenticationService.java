@@ -32,28 +32,25 @@ public class AuthenticationService {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public AuthenticatedUserResponse signIn(LoginRequest loginRequest) {
+    public AuthenticatedUserResponse signIn(LoginRequest loginRequest) throws Exception {
         User user = userService.findUserByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getEmail()));
-
-
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail()));
         boolean correct = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
-       // boolean correct = passwordEncoder.matches(CharBuffer.wrap(loginRequest.getPassword()), user.getPassword());
-
         if (correct) {
             AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user);
-            userResponse.setToken(createToken(user));
+            String token =  createToken(user);
+            userResponse.setToken(token);
             return userResponse;
         }
 
-        // throw new Exception("Invalid password");
-
-        return null;
+        throw new Exception("Invalid password");
     }
 
 
 
     public AuthenticatedUserResponse validateToken(String token) {
+       System.out.println("SECRET KEY " + secretKey);
+
         String login = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -63,11 +60,16 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " ));
 
         AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user);
-        userResponse.setToken(createToken(user));
+        String tokenK =  createToken(user);
+        System.out.println("TOKE GENERATED " +  tokenK);
+
+        userResponse.setToken(tokenK);
+
         return userResponse;
     }
 
     private String createToken(User user) {
+        System.out.println("SECRET KEY " + secretKey);
         Claims claims = Jwts.claims().setSubject(user.getEmail());
 
         Date now = new Date();
