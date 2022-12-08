@@ -3,9 +3,9 @@ values ('Danza SL', 'Some description');
 
 
 INSERT INTO users (full_name, password, email, mobile_number, id_company)
-values ( 'Isagani Quinto', 'isaquinto', 'isaquinto@uoc.edu', '600075567', 1),
- ('Sabrina Alejandra Quintanilla', 'saquintanilla', 'saquintanilla@uoc.edu', '600075567', null),
- ('Cristian Daza Povedano', 'cdazap', 'cdazap@uoc.edu', '600075567', null);
+values ( 'Isagani Quinto', '$2a$10$xzYpKFy48SanpwyfxPp/p.lqQDHaeCBgZjm/xgpc74CGzIBUftffy', 'isaquinto@uoc.edu', '600075567', 1),
+ ('Sabrina Alejandra Quintanilla', '$2a$10$xzYpKFy48SanpwyfxPp/p.lqQDHaeCBgZjm/xgpc74CGzIBUftffy', 'saquintanilla@uoc.edu', '600075567', null),
+ ('Cristian Daza Povedano', '$2a$10$xzYpKFy48SanpwyfxPp/p.lqQDHaeCBgZjm/xgpc74CGzIBUftffy', 'cdazap@uoc.edu', '600075567', null);
 
 INSERT INTO roles (name, description)
 values ('ROLE_ADMINISTRATOR', 'admin'),
