@@ -1,5 +1,6 @@
 package edu.uoc.pds.user.domain.service;
 
+import edu.uoc.pds.user.application.request.AuthenticatedUserResponse;
 import edu.uoc.pds.user.application.request.LoginRequest;
 import edu.uoc.pds.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +11,11 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+
 
 import javax.annotation.PostConstruct;
-import java.nio.CharBuffer;
 import java.util.Base64;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -39,35 +36,39 @@ public class AuthenticationService {
         User user = userService.findUserByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getEmail()));
 
-        if (passwordEncoder.matches(CharBuffer.wrap(loginRequest.getPassword()), user.getPassword())) {
-            AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user)
-            userResponse.setToken(createToken(user))
+
+        boolean correct = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
+       // boolean correct = passwordEncoder.matches(CharBuffer.wrap(loginRequest.getPassword()), user.getPassword());
+
+        if (correct) {
+            AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user);
+            userResponse.setToken(createToken(user));
             return userResponse;
         }
 
-        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+        // throw new Exception("Invalid password");
+
+        return null;
     }
 
 
 
-    public UserDto validateToken(String token) {
+    public AuthenticatedUserResponse validateToken(String token) {
         String login = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-        Optional<BookstoreUser> userOptional = userRepository.findByLogin(login);
+        User user = userService.findUserByEmail(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " ));
 
-        if (userOptional.isEmpty()) {
-            throw new AppException("User not found", HttpStatus.NOT_FOUND);
-        }
-
-        BookstoreUser user = userOptional.get();
-        return userMapper.toUserDto(user, createToken(user));
+        AuthenticatedUserResponse userResponse = AuthenticatedUserResponse.fromDomain(user);
+        userResponse.setToken(createToken(user));
+        return userResponse;
     }
 
-    private String createToken(BookstoreUser user) {
-        Claims claims = Jwts.claims().setSubject(user.getLogin());
+    private String createToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3600000); // 1 hour

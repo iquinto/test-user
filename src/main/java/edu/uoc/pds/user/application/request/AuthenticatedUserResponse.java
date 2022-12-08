@@ -1,13 +1,19 @@
 package edu.uoc.pds.user.application.request;
 
-import edu.uoc.pds.user.infrastructure.repository.jpa.CompanyEntity;
-import edu.uoc.pds.user.infrastructure.repository.jpa.RoleEntity;
-import edu.uoc.pds.user.infrastructure.repository.jpa.UserEntity;
+import edu.uoc.pds.user.domain.Company;
+import edu.uoc.pds.user.domain.Role;
+import edu.uoc.pds.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
+@Getter
+@Setter
+@Builder
 public class AuthenticatedUserResponse {
 
 
@@ -28,7 +34,6 @@ public class AuthenticatedUserResponse {
 
     private Company company;
 
-    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @NotNull
@@ -46,12 +51,11 @@ public class AuthenticatedUserResponse {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .mobileNumber(user.getMobileNumber())
-                .company(CompanyEntity.fromDomain(user.getCompany()))
-                .roles(user.getRoles().stream().map(RoleEntity::fromDomain).collect(Collectors.toSet()))
+                .company(user.getCompany())
+                .roles(user.getRoles())
                 .build();
     }
 
 }
 
 
-}
