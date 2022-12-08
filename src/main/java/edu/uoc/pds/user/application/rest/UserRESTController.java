@@ -53,7 +53,6 @@ public class UserRESTController {
         return ResponseEntity.created(uri).body(companyId);
     }
 
-
     // USERS
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
