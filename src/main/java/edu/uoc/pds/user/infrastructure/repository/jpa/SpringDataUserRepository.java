@@ -12,6 +12,7 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
 
     Optional<UserEntity> findByCompany(Company name);
 
-
     Optional<UserEntity> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 }

@@ -99,14 +99,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        if(user.getCompany()!= null){
+        System.out.println("HOLAALLALA " + user.getEmail());
+        if (userRepository.existsByEmail(user.getEmail())){
+            throw new RuntimeException("Email is alredy used!");
+        }
+
+
+        if(user.getCompany() != null){
             Company company = companyRepository.findCompanyById(user.getCompany().getId()).get();
             user.setCompany(company);
         }
 
         Set<Role> roles = new HashSet<>();
         if(user.getRoles().size() > 0){
-
             user.getRoles().forEach(role -> {
                 switch (role.getName()) {
                     case ROLE_ADMINISTRATOR:
@@ -139,5 +144,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteUser(id);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

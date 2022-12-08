@@ -41,15 +41,19 @@ public class AuthenticationRESTController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> registerBuyer(@RequestBody CreateUserRequest createUserRequest) {
-        log.trace("Creating user " + createUserRequest);
-        User user = userService.createUser(createUserRequest.getUser());
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(user.getId())
-                .toUri();
-
-        return ResponseEntity.created(uri).body(user);
+    public ResponseEntity<?> registerBuyer(@RequestBody CreateUserRequest createUserRequest) {
+        log.info("Creating user " + createUserRequest.getUser());
+        try {
+            User user = userService.createUser(createUserRequest.getUser());
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
+            return ResponseEntity.created(uri).body(user.getId());
+        }catch(Exception e){
+            log.error("Error found :  " + e.getMessage());
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/validatetoken")
