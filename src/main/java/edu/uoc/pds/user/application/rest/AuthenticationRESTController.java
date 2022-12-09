@@ -31,7 +31,10 @@ public class AuthenticationRESTController {
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest) {
         log.info("signIn user with email:  " + loginRequest.getEmail());
         try{
-            AuthenticatedUserResponse authenticatedUserResponse = authenticationService.signIn(loginRequest);
+            User user = authenticationService.signIn(loginRequest.getEmail(), loginRequest.getPassword());
+            AuthenticatedUserResponse authenticatedUserResponse = AuthenticatedUserResponse.fromDomain(user);
+            String key =  authenticationService.createToken(user);
+            authenticatedUserResponse.setToken(key);
             log.info("user found with token :  " + authenticatedUserResponse.getToken());
             return ResponseEntity.ok(authenticatedUserResponse);
         }catch(Exception e){
@@ -58,8 +61,12 @@ public class AuthenticationRESTController {
 
     @PostMapping("/validatetoken")
     public ResponseEntity<AuthenticatedUserResponse> signIn(@RequestParam String token) {
-        log.info("Trying to validate token {}", token);
-        return ResponseEntity.ok(authenticationService.validateToken(token));
+        log.info("Trying to validate token " +  token);
+        User user =  authenticationService.validateToken(token);
+        AuthenticatedUserResponse authenticatedUserResponse = AuthenticatedUserResponse.fromDomain(user);
+        String key =  authenticationService.createToken(user);
+        authenticatedUserResponse.setToken(key);
+        return ResponseEntity.ok(authenticatedUserResponse);
     }
 
 }
