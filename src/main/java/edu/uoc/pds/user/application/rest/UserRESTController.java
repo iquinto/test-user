@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -86,6 +87,15 @@ public class UserRESTController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(user);
+    }
+
+
+    @GetMapping("/test/something")
+    public ResponseEntity<?> getOneBook( HttpServletRequest request) {
+
+        System.out.println("HIAALLALALALLALA " );
+
+        return ResponseEntity.ok("OK");
     }
 
 
