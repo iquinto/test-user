@@ -20,14 +20,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${security.jwt.token.secret-key:secret-key}")
+    @Value("${security.jwt.token.secret-key}")
     private String secretKey;
 
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+
     public User signIn(String email, String password) throws Exception {
+
         User user = userService.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found "));
         boolean correct = passwordEncoder.matches(password, user.getPassword());
