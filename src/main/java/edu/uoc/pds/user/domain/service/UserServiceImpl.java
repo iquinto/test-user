@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     // company
     @Override
-    public List<Company> findAllComapanies() {
+    public List<Company> findAllCompanies() {
         return companyRepository.findAllComapanies();
     }
 
@@ -80,6 +80,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAllUsers();
+    }
+
+    @Override
+    public List<User> findAllUsersByCompany(Company company) {
+        return userRepository.findAllUsersByCompany(company);
     }
 
     @Override

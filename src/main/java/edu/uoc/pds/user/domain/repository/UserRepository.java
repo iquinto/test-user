@@ -12,6 +12,9 @@ public interface UserRepository {
 
     List<User> findAllUsers();
 
+    List<User> findAllUsersByCompany(Company company);
+
+
     Optional<User> findUserById(Long id);
 
     Optional<User> findUserByEmail(String email);

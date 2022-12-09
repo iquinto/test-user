@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.awt.*;
 import java.net.URI;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class UserRESTController {
     @ResponseStatus(HttpStatus.OK)
     public List<Company> findAllComapanies() {
         System.out.println("findAllRoles");
-        return userService.findAllComapanies();
+        return userService.findAllCompanies();
     }
 
     @PostMapping("/companies")
@@ -56,8 +55,14 @@ public class UserRESTController {
     // USERS
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> findAllUsers() {
+    public List<User> findAllUsers(@RequestParam(value = "companyId", required = false) Long companyId) {
         log.trace("findAllUsers");
+
+        if(companyId != null){
+            Company company = userService.findCompanyById(1L).get();
+            return userService.findAllUsersByCompany(company);
+        }
+
         return userService.findAllUsers();
     }
 
