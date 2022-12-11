@@ -36,7 +36,7 @@ public class UserRESTController {
     // COMPANIES
     @GetMapping("/companies")
     @ResponseStatus(HttpStatus.OK)
-    public List<Company> findAllComapanies() {
+    public List<Company> findAllCompanies() {
         System.out.println("findAllRoles");
         return userService.findAllCompanies();
     }
