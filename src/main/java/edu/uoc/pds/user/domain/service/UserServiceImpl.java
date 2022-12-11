@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        System.out.println("HOLAALLALA " + user.getEmail());
         if (userRepository.existsByEmail(user.getEmail())){
             throw new RuntimeException("Email is alredy used!");
         }

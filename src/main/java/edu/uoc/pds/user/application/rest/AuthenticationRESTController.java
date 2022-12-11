@@ -60,7 +60,7 @@ public class AuthenticationRESTController {
     }
 
     @PostMapping("/validatetoken")
-    public ResponseEntity<AuthenticatedUserResponse> signIn(@RequestParam String token) {
+    public ResponseEntity<AuthenticatedUserResponse> validate(@RequestParam String token) {
         log.info("Trying to validate token " +  token);
         User user =  authenticationService.validateToken(token);
         AuthenticatedUserResponse authenticatedUserResponse = AuthenticatedUserResponse.fromDomain(user);

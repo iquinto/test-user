@@ -53,7 +53,7 @@ public class UserEntity implements DomainTranslatable<User> {
         }
 
         return UserEntity.builder()
-                .id(user.getId())
+                //.id(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .password(user.getPassword())
