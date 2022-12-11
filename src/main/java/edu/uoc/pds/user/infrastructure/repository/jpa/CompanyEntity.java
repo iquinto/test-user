@@ -42,7 +42,7 @@ public class CompanyEntity implements DomainTranslatable<Company> {
         }
 
         return CompanyEntity.builder()
-                .id(company.getId())
+              //  .id(company.getId())
                 .name(company.getName())
                 .description(company.getDescription())
                 .build();
