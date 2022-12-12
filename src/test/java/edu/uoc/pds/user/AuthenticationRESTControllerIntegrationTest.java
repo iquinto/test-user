@@ -1,12 +1,13 @@
 package edu.uoc.pds.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.uoc.pds.user.application.rest.AuthenticationRESTController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -83,13 +84,8 @@ class AuthenticationRESTControllerIntegrationTest {
     }
 
     
-    static String CREATE_JSON(String inputString) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Object jsonString = mapper.readValue(inputString, Object.class);
-        return mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(jsonString);
+    static String CREATE_JSON(String inputString) throws JsonProcessingException, JSONException {
+        JSONObject jsonObject= new JSONObject(inputString );
+        return jsonObject.toString();
     }
-
-
-
 }

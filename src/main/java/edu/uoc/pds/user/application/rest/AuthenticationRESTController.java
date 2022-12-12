@@ -1,7 +1,6 @@
 package edu.uoc.pds.user.application.rest;
 
 import edu.uoc.pds.user.application.request.AuthenticatedUserResponse;
-import edu.uoc.pds.user.application.request.CreateCompanyRequest;
 import edu.uoc.pds.user.application.request.CreateUserRequest;
 import edu.uoc.pds.user.application.request.LoginRequest;
 import edu.uoc.pds.user.domain.User;
