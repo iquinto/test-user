@@ -81,7 +81,6 @@ class AuthenticationRESTControllerIntegrationTest {
     static String CREATE_USER_REQUEST() throws JsonProcessingException {
         String inputString = "{\n" +
                 "\t\"user\": {\n" +
-                "    \"id\": 1,\n" +
                 "    \"fullName\": \"Lorem Ipsum\",\n" +
                 "    \"password\": \"loremipsum\",\n" +
                 "    \"email\": \""+NEW_TEST_EMAIL+"\",\n" +

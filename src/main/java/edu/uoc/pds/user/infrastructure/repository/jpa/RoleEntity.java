@@ -35,7 +35,7 @@ public class RoleEntity implements DomainTranslatable<Role> {
         }
 
         return RoleEntity.builder()
-               // .id(role.getId())
+                .id(role.getId())
                 .name(role.getName())
                 .description(role.getDescription())
                 .build();
