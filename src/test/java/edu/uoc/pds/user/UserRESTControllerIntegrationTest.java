@@ -1,5 +1,8 @@
 package edu.uoc.pds.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.uoc.pds.user.application.rest.AuthenticationRESTController;
 import edu.uoc.pds.user.application.rest.UserRESTController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,4 +87,68 @@ class UserRESTControllerIntegrationTest {
                 .andExpect(handler().methodName("findUserByEmail"))
                 .andExpect(jsonPath("$.email", equalTo(TEST_EMAIL)));
     }
+
+
+    @Test
+    @DisplayName("verify if users can create company")
+    public void createCompany() throws Exception {
+
+        String inputString = "{\n" +
+                "    \"company\": {\n" +
+                "       \"name\": \"Rukawa SL\",\n" +
+                "        \"description\": \"Some description\"\n" +
+                "    }\n" +
+                "}";
+
+        mockMvc.perform(post(REST_COMPANIES_PATH  )
+                        .content(CREATE_JSON(inputString))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(handler().handlerType(UserRESTController.class))
+                .andExpect(handler().methodName("createCompany"))
+                .andExpect(jsonPath("$", equalTo(3)));
+    }
+
+
+    @Test
+    @DisplayName("verify if users can be created")
+    public void createUser() throws Exception {
+
+        String inputString = "{\n" +
+                "    \"user\": {\n" +
+                "        \"fullName\": \"test\",\n" +
+                "        \"password\": \"testdsgsdgsdgdsg\",\n" +
+                "        \"email\": \"test@test.com\",\n" +
+                "        \"mobileNumber\": \"11111111111\",\n" +
+                "        \"company\": {\n" +
+                "            \"id\": 1\n" +
+                "        }, \n" +
+                "        \"roles\": [\n" +
+                "            {\"name\": \"ROLE_ORGANIZER\"},\n" +
+                "            {\"name\": \"ROLE_ADMINISTRATOR\"}\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
+
+        mockMvc.perform(post(REST_USERS_PATH )
+                        .content(CREATE_JSON(inputString))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(handler().handlerType(UserRESTController.class))
+                .andExpect(handler().methodName("createUser"))
+                .andExpect(jsonPath("$.email", equalTo("test@test.com")));
+    }
+
+
+
+    static String CREATE_JSON(String inputString) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Object jsonString = mapper.readValue(inputString, Object.class);
+        return mapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(jsonString);
+    }
+
+
 }
