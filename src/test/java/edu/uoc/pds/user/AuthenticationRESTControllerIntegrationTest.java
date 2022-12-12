@@ -42,8 +42,14 @@ class AuthenticationRESTControllerIntegrationTest {
     @Test
     @DisplayName("verify if users can login in the system")
     public void signIn() throws Exception {
+        String inputString = "{\n" +
+                "   \"email\": \""+TEST_EMAIL+"\",\n" +
+                "   \"password\": \"the-password\"\n" +
+                "}";
+
+
         mockMvc.perform(post(REST_AUTH_PATH + "signin")
-                        .content(LOGIN_REQUEST())
+                        .content(CREATE_JSON(inputString))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -55,30 +61,7 @@ class AuthenticationRESTControllerIntegrationTest {
     @Test
     @DisplayName("verify if users (buyers) can register in the system")
     public void registerBuyer() throws Exception {
-        mockMvc.perform(post(REST_AUTH_PATH + "signup" )
-                        .content(CREATE_USER_REQUEST())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
-                .andExpect(handler().handlerType(AuthenticationRESTController.class))
-                .andExpect(handler().methodName("registerBuyer"));
-    }
 
-
-    static String LOGIN_REQUEST() throws JsonProcessingException {
-        String inputString = "{\n" +
-                "   \"email\": \""+TEST_EMAIL+"\",\n" +
-                "   \"password\": \"the-password\"\n" +
-                "}";
-
-        ObjectMapper mapper = new ObjectMapper();
-        Object jsonString = mapper.readValue(inputString, Object.class);
-
-        return mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(jsonString);
-    }
-
-    static String CREATE_USER_REQUEST() throws JsonProcessingException {
         String inputString = "{\n" +
                 "\t\"user\": {\n" +
                 "    \"fullName\": \"Lorem Ipsum\",\n" +
@@ -89,12 +72,24 @@ class AuthenticationRESTControllerIntegrationTest {
                 "    \t]\n" +
                 "\t}\t\n" +
                 "}";
+
+        mockMvc.perform(post(REST_AUTH_PATH + "signup" )
+                        .content(CREATE_JSON(inputString))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(handler().handlerType(AuthenticationRESTController.class))
+                .andExpect(handler().methodName("registerBuyer"));
+    }
+
+    
+    static String CREATE_JSON(String inputString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Object jsonString = mapper.readValue(inputString, Object.class);
-
         return mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(jsonString);
     }
+
 
 
 }
