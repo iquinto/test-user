@@ -12,6 +12,9 @@ public interface UserRepository {
 
     List<User> findAllUsers();
 
+    List<User> findAllUsersByCompany(Company company);
+
+
     Optional<User> findUserById(Long id);
 
     Optional<User> findUserByEmail(String email);
@@ -21,5 +24,7 @@ public interface UserRepository {
     User createUser(User user);
 
     void deleteUser(Long id);
+
+    Boolean existsByEmail(String email);
 
 }

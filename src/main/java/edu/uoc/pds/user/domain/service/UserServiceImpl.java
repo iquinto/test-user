@@ -10,6 +10,7 @@ import edu.uoc.pds.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,6 +27,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public List<Role> findAllRoles() {
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     // company
     @Override
-    public List<Company> findAllComapanies() {
+    public List<Company> findAllCompanies() {
         return companyRepository.findAllComapanies();
     }
 
@@ -80,6 +83,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAllUsersByCompany(Company company) {
+        return userRepository.findAllUsersByCompany(company);
+    }
+
+    @Override
     public Optional<User> findUserById(Long id) {
         return userRepository.findUserById(id);
     }
@@ -96,15 +104,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())){
+            throw new RuntimeException("Email is alredy used!");
+        }
 
-        if(user.getCompany().getId() != null){
+
+        if(user.getCompany() != null){
             Company company = companyRepository.findCompanyById(user.getCompany().getId()).get();
             user.setCompany(company);
         }
 
         Set<Role> roles = new HashSet<>();
         if(user.getRoles().size() > 0){
-
             user.getRoles().forEach(role -> {
                 switch (role.getName()) {
                     case ROLE_ADMINISTRATOR:
@@ -131,11 +142,17 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.createUser(user);
     }
 
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteUser(id);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

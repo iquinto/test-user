@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.awt.*;
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -36,9 +36,9 @@ public class UserRESTController {
     // COMPANIES
     @GetMapping("/companies")
     @ResponseStatus(HttpStatus.OK)
-    public List<Company> findAllComapanies() {
+    public List<Company> findAllCompanies() {
         System.out.println("findAllRoles");
-        return userService.findAllComapanies();
+        return userService.findAllCompanies();
     }
 
     @PostMapping("/companies")
@@ -53,12 +53,17 @@ public class UserRESTController {
         return ResponseEntity.created(uri).body(companyId);
     }
 
-
     // USERS
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> findAllUsers() {
+    public List<User> findAllUsers(@RequestParam(value = "companyId", required = false) Long companyId) {
         log.trace("findAllUsers");
+
+        if(companyId != null){
+            Company company = userService.findCompanyById(1L).get();
+            return userService.findAllUsersByCompany(company);
+        }
+
         return userService.findAllUsers();
     }
 
@@ -82,6 +87,15 @@ public class UserRESTController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(user);
+    }
+
+
+    @GetMapping("/test/something")
+    public ResponseEntity<?> getOneBook( HttpServletRequest request) {
+
+        System.out.println("HIAALLALALALLALA " );
+
+        return ResponseEntity.ok("OK");
     }
 
 

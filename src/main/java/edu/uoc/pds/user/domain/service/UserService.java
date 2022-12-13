@@ -23,7 +23,7 @@ public interface UserService {
     void deleteRole(Long id);
 
     // companies
-    List<Company> findAllComapanies();
+    List<Company> findAllCompanies();
 
     Optional<Company> findCompanyById(Long id);
 
@@ -35,6 +35,9 @@ public interface UserService {
     // users
     List<User> findAllUsers();
 
+    List<User> findAllUsersByCompany(Company company);
+
+
     Optional<User> findUserById(Long id);
 
 
@@ -45,4 +48,6 @@ public interface UserService {
     User createUser(User user);
 
     void deleteUser(Long id);
+
+    Boolean existsByEmail(String email);
 }

@@ -23,6 +23,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> findAllUsersByCompany(Company company) {
+        return jpaRepository.findAllByCompany(CompanyEntity.fromDomain(company)).stream().map(UserEntity::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<User> findUserById(Long id) {
         return  jpaRepository.findById(id).map(UserEntity::toDomain);
     }
@@ -34,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findUserByCompany(Company company) {
-        return jpaRepository.findByCompany(company).map(UserEntity::toDomain);
+        return jpaRepository.findByCompany(CompanyEntity.fromDomain(company)).map(UserEntity::toDomain);
     }
 
     @Override
@@ -45,5 +50,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteUser(Long id) {
         jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return jpaRepository.existsByEmail(email);
     }
 }
