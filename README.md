@@ -1,2 +1,2 @@
-# test-user (service for Users and companies)
+# test-user (Service for users and companies)
 by Isagani QUinto
